@@ -1,0 +1,69 @@
+Procedure Scalelmage;
+var
+pw,ph:integer;
+scaleX,scaleY:real;
+scale:real;
+begin
+pw:=Form1.Img1.Picture.Width;
+ph:=Form1.Img1.Picture.Height;
+if pw>iw
+then scaleX:=iw/pw
+else scaleX:=1;
+if ph>ih
+then scaleY:=ih/ph
+else scaleY:=1;
+if scaleX<scaleY
+then scale:=scaleX
+else scale:=scaleY;
+Form1.Img1.Height:=Round(Form1.Img1.Picture.Height*scale);
+Form1.Img1.Width:=Round(Form1.Img1.Picture.Width*scale);
+end;
+
+procedure TForm1.FirstPicture;
+var
+r:integer;
+begin
+aPath:=edt1.Text;
+r:=FindFirst(aPath+'*.jpg',faAnyFile,aSearchRec);
+if r=0 then
+begin
+aFile:=aPath+aSearchRec.Name;
+Form1.Img1.Picture.LoadFromFile(aFile);
+Scalelmage;
+r:=FindNext(aSearchRec);
+if r=0 then
+Form1.btn1.Enabled:= True;
+end;
+end;
+
+Procedure TForm1.NextPicture();
+var
+r:integer;
+begin
+aFile:=aPath+aSearchRec.Name;
+Form1.Img1.Picture.LoadFromFile(aFile);
+Scalelmage;
+r:=FindNext(aSearchRec);
+if r<>0
+then
+Form1.Btn1.Enabled:=False;
+end;
+
+procedure TForm1.FormActivate(Sender: TObject);
+begin
+Img1.AutoSize:=False;
+Img1.Stretch:=True;
+iw:=Img1.Width;
+ih:=img1.Height;
+btn1.Enabled:=False;
+end;
+
+procedure TForm1.btn3Click(Sender: TObject);
+begin
+FirstPicture;
+end;
+
+procedure TForm1.btn1Click(Sender: TObject);
+begin
+NextPicture;
+end;
